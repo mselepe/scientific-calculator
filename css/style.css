@@ -26,6 +26,11 @@ main {
 input{
     width: 100%;
     height: 25%;
+
+    font-size: 60px;
+    text-align: right;
+    text-decoration: none;
+    
 }
 
 button {
