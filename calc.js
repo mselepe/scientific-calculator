@@ -31,16 +31,16 @@ document.getElementById("equalSign").onclick = function () {
     var equationArray = equation.split(/| /);
 
 
-    for (var i=0; i<equation.length; i++) {
-        var currentChar = equationList.charAt(i);
-        var previousChar = equationList.charAt(i-1);
+    // for (var i=0; i<equation.length; i++) {
+    //     var currentChar = equationArray.charAt(i);
+    //     var previousChar = equationArray.charAt(i-1);
         
-        if (!isNaN(currentChar)) { //convert digits to number
-            currentChar = Number(currentChar);
-        }
-    }
+    //     if (!isNaN(currentChar)) { //convert digits to number
+    //         currentChar = Number(currentChar);
+    //     }
+    // }
     
-    console.log(equationList);
+    console.log(typeof equationArray);
     // if (currentChar == "(") {
         
     // }
