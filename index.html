@@ -11,57 +11,57 @@
         <input type="text" id="equation" name="equation" placeholder="0" autofocus/>
         <section class="buttons" id="input-getValue">
             <br><br>
-            <button class="scientific-button" onclick="getValue('mc')">mc</button>
-            <button class="scientific-button" onclick="getValue('m+')">m+</button>
-            <button class="scientific-button" onclick="getValue('m-')">m-</button>
-            <button class="scientific-button" onclick="getValue('mr')">mr</button>
-            <button class="scientific-button" onclick="getValue('${&plusmn}')">&plusmn</button>
-            <button class="scientific-button" onclick="getValue('&#40;')">(</button>
-            <button class="scientific-button" onclick="getValue('&#41;')">)</button>
-            <button class="basic-button" onclick="getValue('%')">%</button>
-            <button class="basic-button" onclick="getValue('AC')">AC</button>
-            <button class="basic-button" onclick="getValue('/')">/</button>
+            <button class="scientific-button" onclick="displayValue('mc')">mc</button>
+            <button class="scientific-button" onclick="displayValue('m+')">m+</button>
+            <button class="scientific-button" onclick="displayValue('m-')">m-</button>
+            <button class="scientific-button" onclick="displayValue('mr')">mr</button>
+            <button class="scientific-button" onclick="displayValue('&plusmn')">&plusmn</button>
+            <button class="scientific-button" onclick="displayValue('&#40;')">(</button>
+            <button class="scientific-button" onclick="displayValue('&#41;')">)</button>
+            <button class="basic-button" onclick="displayValue('%')">%</button>
+            <button class="basic-button" id="allClear">AC</button>
+            <button class="basic-button" onclick="displayValue('/')">/</button>
             <br><br>
-            <button class="scientific-button" onclick="getValue('${2<sup>nd</sup>}')">2<sup>nd</sup></button>
-            <button class="scientific-button" onclick="getValue('${&sup2;}')"><i>x</i>&sup2;</button>
-            <button class="scientific-button" onclick="getValue('${&sup3;}')"><i>x</i>&sup3;</button>
-            <button class="scientific-button" onclick="getValue('x${<sup>y</sup>}')"><i>x</i><sup><i>y</i></sup></button>
-            <button class="scientific-button" onclick="getValue('e${<sup>x</sup>}')">e<sup><i>x</i></sup></button>
-            <button class="scientific-button" onclick="getValue('10${<sup>x</sup>}')">10<sup><i>x</i></sup></button>
-            <button class="basic-button" onclick="getValue('7')">7</button>
-            <button class="basic-button" onclick="getValue('8')">8</button>
-            <button class="basic-button" onclick="getValue('9')">9</button>
-            <button class="basic-button" onclick="getValue('${&times;}')">&times;</button>
+            <button class="scientific-button" onclick="displayValue('2<sup>nd</sup>')">2<sup>nd</sup></button> 
+            <button class="scientific-button" onclick="displayValue('&sup2;')"><i>x</i>&sup2;</button>
+            <button class="scientific-button" onclick="displayValue('&sup3;')"><i>x</i>&sup3;</button>
+            <button class="scientific-button" onclick="displayValue('x<sup>y</sup>')"><i>x</i><sup><i>y</i></sup></button>
+            <button class="scientific-button" onclick="displayValue('e<sup>x</sup>')">e<sup><i>x</i></sup></button>
+            <button class="scientific-button" onclick="displayValue('10<sup>x</sup>')">10<sup><i>x</i></sup></button>
+            <button class="basic-button" onclick="displayValue('7')">7</button>
+            <button class="basic-button" onclick="displayValue('8')">8</button>
+            <button class="basic-button" onclick="displayValue('9')">9</button>
+            <button class="basic-button" onclick="displayValue('&times;')">&times;</button>
             <br><br>
-            <button class="scientific-button" onclick="getValue('1')"><sup>1</sup>&frasl;<sub><i>x</i></sub></button>
-            <button class="scientific-button" onclick="getValue('${&radic;}')">&radic;<i>x</i></button>
-            <button class="scientific-button" onclick="getValue('${&#8731;}')">&#8731;<i>x</i></button>
-            <button class="scientific-button" onclick="getValue('in')">in</button>
-            <button class="long-button scientific-button" onclick="getValue('log10')">log10</button>
-            <button class="basic-button" onclick="getValue('4')">4</button>
-            <button class="basic-button" onclick="getValue('5')">5</button>
-            <button class="basic-button" onclick="getValue('6')">6</button>
-            <button class="basic-button" onclick="getValue('-')">-</button>
+            <button class="scientific-button" onclick="displayValue('1/')"><sup>1</sup>&frasl;<sub><i>x</i></sub></button>
+            <button class="scientific-button" onclick="displayValue('&radic;')">&radic;<i>x</i></button>
+            <button class="scientific-button" onclick="displayValue('&#8731;')">&#8731;<i>x</i></button>
+            <button class="scientific-button" onclick="displayValue('in')">in</button>
+            <button class="long-button scientific-button" onclick="displayValue('log10')">log10</button>
+            <button class="basic-button" onclick="displayValue('4')">4</button>
+            <button class="basic-button" onclick="displayValue('5')">5</button>
+            <button class="basic-button" onclick="displayValue('6')">6</button>
+            <button class="basic-button" onclick="displayValue('-')">-</button>
             <br><br>
-            <button class="scientific-button" onclick="getValue('x!')">x!</button>
-            <button class="scientific-button" onclick="getValue('sin${&#40;}')">sin</button>
-            <button class="scientific-button" onclick="getValue('${cos&#40;}')">cos</button>
-            <button class="scientific-button" onclick="getValue('${tan&#40;}')">tan</button>
-            <button class="scientific-button" onclick="getValue('e')">e</button>
-            <button class="scientific-button" onclick="getValue('EE')">EE</button>
-            <button class="basic-button" onclick="getValue('1')">1</button>
-            <button class="basic-button" onclick="getValue('2')">2</button>
-            <button class="basic-button" onclick="getValue('3')">3</button>
-            <button class="basic-button" onclick="getValue('+')">+</button>
+            <button class="scientific-button" onclick="displayValue('!')">x!</button>
+            <button class="scientific-button" onclick="displayValue('sin&#40;')">sin</button>
+            <button class="scientific-button" onclick="displayValue('cos&#40;')">cos</button>
+            <button class="scientific-button" onclick="displayValue('tan&#40;')">tan</button>
+            <button class="scientific-button" onclick="displayValue('e')">e</button>
+            <button class="scientific-button" onclick="displayValue('EE')">EE</button>
+            <button class="basic-button" onclick="displayValue('1')">1</button>
+            <button class="basic-button" onclick="displayValue('2')">2</button>
+            <button class="basic-button" onclick="displayValue('3')">3</button>
+            <button class="basic-button" onclick="displayValue('+')">+</button>
             <br><br>
-            <button class="long-button scientific-button" onclick="getValue('sinh${&#40;}')">sinh</button>
-            <button class="long-button scientific-button" onclick="getValue('cosh${&#40;}')">cosh</button>
-            <button class="long-button scientific-button" onclick="getValue('tanh${&#40;}')">tanh</button>
-            <button class="scientific-button" onclick="getValue('π')">π</button>
-            <button class="scientific-button" onclick="getValue(',')">,</button>
-            <button class="basic-button" onclick="getValue('.')">.</button>
-            <button class="basic-button" onclick="getValue('0')">0</button>
-            <button class="basic-button" id="equalSign">=</button>
+            <button class="long-button scientific-button" onclick="displayValue('sinh&#40;')">sinh</button>
+            <button class="long-button scientific-button" onclick="displayValue('cosh&#40;')">cosh</button>
+            <button class="long-button scientific-button" onclick="displayValue('tanh&#40;')">tanh</button>
+            <button class="scientific-button" onclick="displayValue('π')">π</button>
+            <button class="scientific-button" onclick="displayValue(',')">,</button>
+            <button class="basic-button" onclick="displayValue('.')">.</button>
+            <button class="basic-button" onclick="displayValue('0')">0</button>
+            <button class="basic-button" id="equalSign" onclick="displayAnswer()">=</button>
         </section>
     </main>
     <br><br>
