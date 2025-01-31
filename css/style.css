@@ -3,7 +3,7 @@
 }
 
 body {
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family:'Arial Narrow', Arial, sans-serif;
     background-color: #87aaae;
     margin: 100px;
 }
@@ -34,11 +34,12 @@ input{
 }
 
 button {
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: lighter;
 
     width: 50px;
     height: 50px;
-    padding: 5px;
+    padding: 7px;
     border-radius: 5px;
 
     background-color: #eeeeee;

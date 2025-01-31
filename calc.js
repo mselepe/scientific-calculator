@@ -10,50 +10,19 @@ function convertInput (equation) {
     
     // Convert the numbers
     if (equation.length > 0) {
-        var valuesInEquation = equation.split(/[-+/x]/);
+        var valuesInEquation = equation.split(/[-+/×]/);
         var convertedValue = new Array();
         var symbols = new Array();
 
         for (var i=0; i<valuesInEquation.length; i++) {
-            var currentChar = valuesInEquation[i];
-            var sqrChar = String.fromCharCode("&sup");
-            
-            if (currentChar[1] === "2"|| currentChar.endsWith("&sup3;")) {
-                convertedValue.push(currentChar)
+            var currentChar = valuesInEquation[i];            
+        
+            if (!isNaN(currentChar)){ //convert digits to number
+                convertedValue.push(Number(currentChar)); 
+                console.log(typeof currentChar);
+            } else { 
+                convertedValue.push(currentChar); 
             }
-            
-            // if (!isNaN(currentChar) || currentChar==="e" || currentChar.startsWith("EE") || currentChar==="in" || currentChar.startsWith("log") || currentChar.startsWith("sin") || currentChar.startsWith("cos") || currentChar.startsWith("tan") || currentChar.startsWith("m") || currentChar.startsWith("π")) { //convert digits to number
-            //     if (!isNaN(currentChar)){ 
-            //         convertedValue.push(Number(currentChar)); 
-            //         console.log(typeof currentChar);
-            //     } else { 
-            //         switch(currentChar) {
-            //             case "π":
-            //                 convertedValue.push(Math.PI);
-            //                 break;
-            //             case "e":
-            //                 convertedValue.push(Math.E);
-            //                 break;
-            //             case "EE":
-            //                 // convertedValue.push(Math.pow(10));
-            //                 break;
-            //             case "sin":
-            //                 convertedValue.push(Math.E);
-            //                 break;
-            //             case "cos":
-            //                 convertedValue.push(Math.E);
-            //                 break;
-            //             case "tan":
-            //                 convertedValue.push(Math.E);
-            //                 break;
-
-            //             default:
-            //               // code block
-            //           }
-            //           convertedValue.push(currentChar); 
-
-            //     }
-            // } 
         }    
 
         var symbolsInEquation
@@ -63,6 +32,10 @@ function convertInput (equation) {
     }
 }
 
+function squareNumber(value) {
+    Math.pow(value, 2)
+}
+
 
 function memoryWork(equationArray) {
     for (var i=0; i<equationArray.length; i++) {
@@ -70,32 +43,93 @@ function memoryWork(equationArray) {
 
         switch(currentChar) {
             case "π":
-                // convertedValue.push(Math.PI);
                 currentChar = Math.PI;
                 break;
+
             case "e":
-                // convertedValue.push(Math.E);
                 currentChar = Math.E;
                 break;
+
             case currentChar.startsWith("EE"):
-                // convertedValue.push(Math.pow(10));
-                var power = currentChar.slice(2);
+                var power = Number(currentChar.slice(2));
                 currentChar = Math.pow(10, power);
-                equationArray.splice(power, 1);
                 break;
-            case "sinh":
+                
+            case currentChar.startsWith("∛"):
+                var base = Number(currentChar.slice(1));
+                currentChar = Math.cbrt(base);
+                break;
+
+            case currentChar.startsWith("√"):
+                var base = Number(currentChar.slice(1));
+                currentChar = Math.sqrt(base);
+                break;
+
+            case currentChar.startsWith("±"):
+                var base = Number(currentChar.slice(1));
+                currentChar = base * -1;
+                break;
+
+            case currentChar.endsWith("²"):
+                var base = Number(currentChar.slice(0, -1));
+                currentChar = Math.pow(base, 2);
+                break;
+
+            case currentChar.endsWith("³"):
+                var base = Number(currentChar.slice(0, -1));
+                currentChar = Math.pow(base, 3);
+                break;
+
+            case currentChar.endsWith("!"):
+                var base = Number(currentChar.slice(0, -1));
+                currentChar = Math.abs(base);
+                break;
+            
+            case currentChar.endsWith("%"):
+                var base = Number(currentChar.slice(0, -1));
+                currentChar = base/100;
+                break;
+            
+            case currentChar.startsWith("ln("):
+                var base = Number(currentChar.slice(0, -1));
+                currentChar = Math.abs(base);
+                break;
+              
+            case currentChar.startsWith("log("):
+                var base = Number(currentChar.slice(0, -1));
+                currentChar = Math.abs(base);
+                break;
+        
+            case currentChar.startsWith("sinh("):
+                var base = Number(currentChar.slice(0, -1));
+                currentChar = Math.abs(base);
+                break;    
+
+            case currentChar.startsWith("cosh("):
                 var param = currentChar.slice(2);
                 currentChar = Math.pow(10, param);
                 equationArray.splice(param, 1);
-
                 break;
-            case "cosh":
+
+            case currentChar.startsWith("tanh("):
                 var param = currentChar.slice(2);
                 currentChar = Math.pow(10, param);
                 equationArray.splice(param, 1);
-
                 break;
-            case "tanh":
+
+            case currentChar.startsWith("sin("):
+                var param = currentChar.slice(2);
+                currentChar = Math.pow(10, param);
+                equationArray.splice(param, 1);
+                break;
+
+            case currentChar.startsWith("cos("):
+                var param = currentChar.slice(2);
+                currentChar = Math.pow(10, param);
+                equationArray.splice(param, 1);
+                break;
+
+            case currentChar.startsWith("tan("):
                 var param = currentChar.slice(2);
                 currentChar = Math.pow(10, param);
                 equationArray.splice(param, 1);
@@ -114,6 +148,14 @@ function memoryWork(equationArray) {
 // function solve(equationArray) {}
 // solve();
 
+function factorial(num) {
+    let result = 1;
+    for (let i = num; 0<i <= num; i--) {
+        result*=i;
+    }
+    return result;
+}
+
 
 
 var equation;
@@ -122,7 +164,7 @@ document.getElementById("equalSign").onclick = function () {
     // var box = document.getElementById("equation");
     equation = document.getElementById("equation").value;
     
-    var convertedEquation = convertInput(equation);
+    // var convertedEquation = convertInput(equation);
     // for (var i=0; i<convertedEquation.length; i++) {
     //     var t = convertedEquation[i];
     //     if (!isNaN(t)) {
@@ -130,8 +172,8 @@ document.getElementById("equalSign").onclick = function () {
     //     }
     // }
     
-    displayAnswer(convertedEquation);
-    console.log(convertedEquation);
+    displayAnswer(factorial(3));
+    console.log(factorial(3));
 }
 
 function displayAnswer(answer) {
