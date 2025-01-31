@@ -1,15 +1,29 @@
+// Cnvert the equation so that it's solvable
 function convertInput (equation) {
     var convertedEq = new Array();
     
-    // Convert the numbers
     if (equation.length > 0) {
         var valuesInEquation = equation.split(/[-+/×]/);
         var convertedValue = new Array();
         var symbols = new Array();
 
+        var valuesInBrackets = new Array();
+        for (var i=0; i<valuesInEquation.length; i++) {
+            var currentChar = valuesInEquation[i]; 
+            if (currentChar.startsWith("(")) {
+
+                // while (!currentChar.endsWith(")")) {
+                valuesInBrackets.push(currentChar);
+                // }
+    
+            }
+
+        }
+
         for (var i=0; i<valuesInEquation.length; i++) {
             var currentChar = valuesInEquation[i];            
         
+
             if (!isNaN(currentChar)){ //convert digits to number
                 convertedValue.push(Number(currentChar)); 
                 // console.log(typeof currentChar);
@@ -22,14 +36,10 @@ function convertInput (equation) {
         
 
         // var symbolsInEquation;
-        return convertedValue;
+        return valuesInBrackets;
     } else {
         return "";
     }
-}
-
-function squareNumber(value) {
-    Math.pow(value, 2)
 }
 
 
@@ -62,6 +72,17 @@ function scientificButtonConversion(currentChar) {
         var base = Number(currentChar.slice(0, -1));
         currentChar = Math.pow(base, 3);
 
+    } else if (currentChar.startsWith("e^")) {
+        var indexOfPowerSymbol = currentChar.indexOf("^");
+        var power = Number(currentChar.slice(indexOfPowerSymbol+1));
+        currentChar = Math.exp(power);
+        
+    } else if (currentChar.includes("^")) {
+        var indexOfPowerSymbol = currentChar.indexOf("^");
+        var base = Number(currentChar.slice(0, indexOfPowerSymbol));
+        var power = Number(currentChar.slice(indexOfPowerSymbol+1));
+        currentChar = Math.pow(base, power);
+    
     } else if (currentChar.endsWith("!")) {
         var base = Number(currentChar.slice(0, -1));
         currentChar = factorial(base);
@@ -118,10 +139,11 @@ function scientificButtonConversion(currentChar) {
 }
 
 
-function brackets(equationInBrackets) {
+function handleBrackets(equationInBrackets) {
     if (equation.length === 0 || equation.length === 1 ) {
         return equation;
-    }
+    } 
+    // else if () {}
     //  else {
     //     return 
     // }
