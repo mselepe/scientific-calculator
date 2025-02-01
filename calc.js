@@ -1,18 +1,20 @@
-// Cnvert the equation so that it's solvable
+// Convert the equation so that it's solvable
 function convertInput (equation) {
-    var valuesInEquation = equation.split(/[-+/×]/);
-    var splitEquation = equation.split(/| /);
+    var splitEquation = equation.split(/|/);
     var convertedValues = new Array();
     var symbolsInEquation = new Array();
     var symbols = new Array();
-
+    
     var convertedEq = new Array();
     
+    if 
+
     if (valuesInEquation.length > 1) {
+        var valuesInEquation = equation.split(/[-+/×]/);
         // Convert the values and put them in an array
         for (var i=0; i<valuesInEquation.length; i++) {
             var currentChar = valuesInEquation[i];            
-        
+            
             if (!isNaN(currentChar)){ //convert digits to number
                 convertedValues.push(Number(currentChar)); 
             } else { 
@@ -24,13 +26,15 @@ function convertInput (equation) {
         
         // Put the symbols in an array
         for (var i=0; i<splitEquation.length; i++) {
+            var symbols = ["-", "+", "×", "/"];
             var currentChar = splitEquation[i];            
-        
-            if (currentChar in ["-", "+", "×", "/"]) {
+            
+            if (symbols.includes(currentChar)) {
                 symbolsInEquation.push(currentChar);
             }
         }
-        convertedEq.push(symbols);
+        convertedEq.push(symbolsInEquation);
+        return convertedEq;
 
     } else if (valuesInEquation.length === 1 || splitEquation.length === 1) {
 
@@ -48,8 +52,8 @@ function convertInput (equation) {
     }    
 }    
 
-
-function handleBrackets(equation) {
+// Extract the bracket equation from full equation
+function extractBrackets(equation) {
     var valuesInBrackets = new Array();
 
     if (equation.length > 0) {
@@ -57,20 +61,19 @@ function handleBrackets(equation) {
         if (equation.includes("(")) {
             var bracketOpenIndex;
             var bracketCloseIndex;
-            for (var i=0; i<valuesInEquation.length; i++) {
-                bracketOpenIndex = equation.indexOf("(");
-                bracketCloseIndex = equation.indexOf(")");
+            for (var i=0; i<equation.length; i++) {
+                bracketOpenIndex = equation.indexOf("(")+1;
+                bracketCloseIndex = equation.indexOf(")")-1;
             }
             valuesInBrackets = equation.slice(bracketOpenIndex, bracketCloseIndex+1);
         }
-        
+        return valuesInBrackets;
     } else {
-        return equation;
+        return valuesInBrackets;
     }
-
 }
 
-
+// Convert and implement the scientific buttons on the calculator
 function scientificButtonConversion(currentChar) {
     if (currentChar === "π") {
         currentChar = Math.PI;
@@ -122,12 +125,15 @@ function scientificButtonConversion(currentChar) {
         currentChar = base/100;
     
     } else if (currentChar.startsWith("abs(")) {
-        var base = Number(currentChar.slice(4, -1));
+        var base = extractBrackets(currentChar);
+        base = Number(base);
         currentChar = Math.abs(base);
     
     } else if (currentChar.startsWith("ln(")) {
-        var base = Number(currentChar.slice(0, -1));
-        currentChar = Math.abs(base);
+        var base = extractBrackets(currentChar);
+        base = Number(base);
+        console.log(base);
+        currentChar = Math.log(base);
     
     } else if (currentChar.startsWith("log(")) {
         var base = Number(currentChar.slice(0, -1));
@@ -168,6 +174,7 @@ function scientificButtonConversion(currentChar) {
     
 }    
 
+// Check whether the base is a number
 function checkBase(base) {
     if (base && !(base in ["-", "+", "×", "/"])) {
         return base;
@@ -176,6 +183,7 @@ function checkBase(base) {
     }
 }
 
+// Get the factorial of a number
 function factorial(num) {
     let result = 1;
     for (let i = num; i>0; i--) {
@@ -184,25 +192,29 @@ function factorial(num) {
     return result;
 }
 
+// Display the entered value
 function displayValue(value) {
     var display = document.getElementById("equation");
     display.value += value; 
 }
 
+// Display the answer
 function displayAnswer(answer) {
     document.getElementById("equation").value = answer;
 }
 
-
+// Execute the calculator
 var equation;
 document.getElementById("equalSign").onclick = function () {
     var equation = document.getElementById("equation").value;
-    var convertedEquation = convertInput(equation);
+    var bracketEquation = extractBrackets(equation);
+    var convertedBracketEquation = convertInput(bracketEquation);
     
-    displayAnswer(convertedEquation);
-    console.log(convertedEquation);
+    displayAnswer(convertedBracketEquation);
+    console.log(convertedBracketEquation);
 }
 
+// Clear the  calculator text box
 document.getElementById("allClear").onclick = function () {
     document.getElementById("equation").value = "";    
 }
