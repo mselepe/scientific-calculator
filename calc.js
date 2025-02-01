@@ -8,7 +8,7 @@ function convertInput (equation) {
     
     var convertedEq = new Array();
 
-    if (equation.includes("+") || equation.includes("-") || equation.includes("/") || equation.includes("-")) {
+    if (equation.includes("+") || equation.includes("×") || equation.includes("/") || equation.includes("-")) {
         valuesInEquation = equation.split(/[-+/×]/);
     } else {
         valuesInEquation = [equation];
@@ -70,7 +70,13 @@ function extractBrackets(equation) {
             }
             valuesInBrackets = equation.slice(bracketOpenIndex, bracketCloseIndex+1);
         }
-        return valuesInBrackets;
+
+        var bracketEquation = extractBrackets(equation);
+        var convertedBracketEquation = convertInput(bracketEquation);
+        var BracketSolution = solve(convertedBracketEquation);
+
+        
+        // return valuesInBrackets;
     } else {
         return valuesInBrackets;
     }
@@ -180,50 +186,50 @@ function scientificButtonConversion(currentChar) {
 
 function solve(equationArray) {
     var valuesArray = equationArray[0];
-    var symbolArray = equationArray[1];
     var answer;
+    
+    if (equationArray[1]) {
+        var symbolArray = equationArray[1];
+        symbolArray.forEach((stringSymbol, i)  => {
+            if (stringSymbol === "/") {
+                answer = valuesArray[i] / valuesArray[i+1];
+                valuesArray[i] = answer;
+                symbolArray.splice(i, 1);  
+                valuesArray.splice(i+1, 1);  
+            }
+        })
+    
+        symbolArray.forEach((stringSymbol, i)  => {
+            if (stringSymbol === "×") {
+                answer = valuesArray[i] * valuesArray[i+1];
+                valuesArray[i] = answer;
+                symbolArray.splice(i, 1);  
+                valuesArray.splice(i+1, 1);  
+            }
+        })
+    
+        symbolArray.forEach((stringSymbol, i)  => {
+            if (stringSymbol === "+") {
+                answer = valuesArray[i] + valuesArray[i+1];
+                valuesArray[i] = answer;
+                symbolArray.splice(i, 1);  
+                valuesArray.splice(i+1, 1);  
+            }
+        })
+    
+        symbolArray.forEach((stringSymbol, i)  => {
+            if (stringSymbol === "-") {
+                answer = valuesArray[i] - valuesArray[i+1];
+                valuesArray[i] = answer;
+                symbolArray.splice(i, 1);  
+                valuesArray.splice(i+1, 1);  
+            }
+        })
 
-    for (var i=0; i<symbolArray.length; i++) {
-        var symbol = symbolArray[i];
-
-        if (symbol === "/") {
-            answer = valuesArray[i] / valuesArray[i+1];
-            valuesArray[i] = answer;
-            valuesArray.splice(i+1, 1);
-        }
+        return valuesArray;
+    } else {
+        return valuesArray;
     }
-
-    for (var i=0; i<symbolArray.length; i++) {
-        var symbol = symbolArray[i];
-
-        if (symbol === "×") {
-            answer = valuesArray[i] * valuesArray[i+1];
-            valuesArray[i] = answer;
-            valuesArray.splice(i+1, 1);
-        }
-    }
-
-    for (var i=0; i<symbolArray.length; i++) {
-        var symbol = symbolArray[i];
-
-        if (symbol === "+") {
-            answer = valuesArray[i] + valuesArray[i+1];
-            valuesArray[i] = answer;
-            valuesArray.splice(i+1, 1);
-        }
-    }
-
-    for (var i=0; i<symbolArray.length; i++) {
-        var symbol = symbolArray[i];
-
-        if (symbol === "-") {
-            answer = valuesArray[i] - valuesArray[i+1];
-            valuesArray[i] = answer;
-            valuesArray.splice(i+1, 1);
-        }
-    }
-
-    return 
 }
 
 // Check whether the base is a number
@@ -259,11 +265,14 @@ function displayAnswer(answer) {
 var equation;
 document.getElementById("equalSign").onclick = function () {
     var equation = document.getElementById("equation").value;
-    // var bracketEquation = extractBrackets(equation);
-    var convertedBracketEquation = convertInput(equation);
+    var bracketEquation = extractBrackets(equation);
+    var convertedBracketEquation = convertInput(bracketEquation);
+    var BracketSolution = solve(convertedBracketEquation);
+
+
     
-    displayAnswer(convertedBracketEquation);
-    console.log(convertedBracketEquation);
+    displayAnswer(solution);
+    console.log(solution);
 }
 
 // Clear the  calculator text box
