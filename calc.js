@@ -1,63 +1,93 @@
 // Cnvert the equation so that it's solvable
 function convertInput (equation) {
+    var valuesInEquation = equation.split(/[-+/×]/);
+    var splitEquation = equation.split(/| /);
+    var convertedValues = new Array();
+    var symbolsInEquation = new Array();
+    var symbols = new Array();
+
     var convertedEq = new Array();
     
-    if (equation.length > 0) {
-        var valuesInEquation = equation.split(/[-+/×]/);
-        var convertedValue = new Array();
-        var symbols = new Array();
-
-        var valuesInBrackets = new Array();
-        for (var i=0; i<valuesInEquation.length; i++) {
-            var currentChar = valuesInEquation[i]; 
-            if (currentChar.startsWith("(")) {
-
-                // while (!currentChar.endsWith(")")) {
-                valuesInBrackets.push(currentChar);
-                // }
-    
-            }
-
-        }
-
+    if (valuesInEquation.length > 1) {
+        // Convert the values and put them in an array
         for (var i=0; i<valuesInEquation.length; i++) {
             var currentChar = valuesInEquation[i];            
         
-
             if (!isNaN(currentChar)){ //convert digits to number
-                convertedValue.push(Number(currentChar)); 
-                // console.log(typeof currentChar);
+                convertedValues.push(Number(currentChar)); 
             } else { 
                 currentChar = scientificButtonConversion(currentChar);
-                convertedValue.push(currentChar); 
+                convertedValues.push(currentChar); 
             }
-        }    
-
+        }   
+        convertedEq.push(convertedValues); 
         
+        // Put the symbols in an array
+        for (var i=0; i<splitEquation.length; i++) {
+            var currentChar = splitEquation[i];            
+        
+            if (currentChar in ["-", "+", "×", "/"]) {
+                symbolsInEquation.push(currentChar);
+            }
+        }
+        convertedEq.push(symbols);
 
-        // var symbolsInEquation;
-        return valuesInBrackets;
-    } else {
+    } else if (valuesInEquation.length === 1 || splitEquation.length === 1) {
+
+        if (!isNaN(equation)){ //convert digits to number
+            convertedEq.push(Number(equation)); 
+        } else { 
+            equation = scientificButtonConversion(equation);
+            convertedEq.push(equation); 
+        }   
+        return convertedEq;
+    }  
+
+    else {
         return "";
+    }    
+}    
+
+
+function handleBrackets(equation) {
+    var valuesInBrackets = new Array();
+
+    if (equation.length > 0) {
+
+        if (equation.includes("(")) {
+            var bracketOpenIndex;
+            var bracketCloseIndex;
+            for (var i=0; i<valuesInEquation.length; i++) {
+                bracketOpenIndex = equation.indexOf("(");
+                bracketCloseIndex = equation.indexOf(")");
+            }
+            valuesInBrackets = equation.slice(bracketOpenIndex, bracketCloseIndex+1);
+        }
+        
+    } else {
+        return equation;
     }
+
 }
 
 
 function scientificButtonConversion(currentChar) {
-    if (currentChar === "π") {currentChar = Math.PI;
+    if (currentChar === "π") {
+        currentChar = Math.PI;
+
     } else if (currentChar === "e") {
         currentChar = Math.E;
 
     } else if (currentChar.startsWith("EE")) {
-        var power = Number(currentChar.slice(2));
+        var power = checkBase(Number(currentChar.slice(2)));
         currentChar = Math.pow(10, power);
 
     } else if (currentChar.startsWith("∛")) {
-        var base = Number(currentChar.slice(1));
+        var base = checkBase(Number(currentChar.slice(1)));
         currentChar = Math.cbrt(base);
 
     } else if (currentChar.startsWith("√")) {
-        var base = Number(currentChar.slice(1));
+        var base = checkBase(Number(currentChar.slice(2)));
         currentChar = Math.sqrt(base);
 
     } else if (currentChar.startsWith("±")){
@@ -65,34 +95,34 @@ function scientificButtonConversion(currentChar) {
         currentChar = base * -1;
 
     } else if (currentChar.endsWith("²")) {
-        var base = Number(currentChar.slice(0, -1));
+        var base = checkBase(Number(currentChar.slice(0, -1)));
         currentChar = Math.pow(base, 2);
 
     } else if (currentChar.endsWith("³")) {
-        var base = Number(currentChar.slice(0, -1));
+        var base = checkBase(Number(currentChar.slice(0, -1)));
         currentChar = Math.pow(base, 3);
 
     } else if (currentChar.startsWith("e^")) {
         var indexOfPowerSymbol = currentChar.indexOf("^");
-        var power = Number(currentChar.slice(indexOfPowerSymbol+1));
+        var power = checkBase(Number(currentChar.slice(indexOfPowerSymbol+1)));
         currentChar = Math.exp(power);
         
     } else if (currentChar.includes("^")) {
         var indexOfPowerSymbol = currentChar.indexOf("^");
-        var base = Number(currentChar.slice(0, indexOfPowerSymbol));
-        var power = Number(currentChar.slice(indexOfPowerSymbol+1));
+        var base = checkBase(Number(currentChar.slice(0, indexOfPowerSymbol)));
+        var power = checkBase(Number(currentChar.slice(indexOfPowerSymbol+1)));
         currentChar = Math.pow(base, power);
     
     } else if (currentChar.endsWith("!")) {
-        var base = Number(currentChar.slice(0, -1));
+        var base = checkBase(Number(currentChar.slice(0, -1)));
         currentChar = factorial(base);
     
     } else if (currentChar.endsWith("%")) {
-        var base = Number(currentChar.slice(0, -1));
+        var base = checkBase(Number(currentChar.slice(0, -1)));
         currentChar = base/100;
     
     } else if (currentChar.startsWith("abs(")) {
-        var base = Number(currentChar.slice(0, -1));
+        var base = Number(currentChar.slice(4, -1));
         currentChar = Math.abs(base);
     
     } else if (currentChar.startsWith("ln(")) {
@@ -131,24 +161,20 @@ function scientificButtonConversion(currentChar) {
         var param = currentChar.slice(2);
         currentChar = Math.pow(10, param);
         equationArray.splice(param, 1);
-    }
+    }  
 
         // console.log(typeof currentChar);
-    return currentChar;
+    return currentChar;    
     
+}    
+
+function checkBase(base) {
+    if (base && !(base in ["-", "+", "×", "/"])) {
+        return base;
+    } else {
+        return "NaN"
+    }
 }
-
-
-function handleBrackets(equationInBrackets) {
-    if (equation.length === 0 || equation.length === 1 ) {
-        return equation;
-    } 
-    // else if () {}
-    //  else {
-    //     return 
-    // }
-}
-
 
 function factorial(num) {
     let result = 1;
