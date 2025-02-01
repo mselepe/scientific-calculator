@@ -1,16 +1,20 @@
 // Convert the equation so that it's solvable
 function convertInput (equation) {
-    var splitEquation = equation.split(/|/);
+    var valuesInEquation;
+    var splitEquation = equation.split(/| /);
     var convertedValues = new Array();
     var symbolsInEquation = new Array();
     var symbols = new Array();
     
     var convertedEq = new Array();
-    
-    if 
 
+    if (equation.includes("+") || equation.includes("-") || equation.includes("/") || equation.includes("-")) {
+        valuesInEquation = equation.split(/[-+/×]/);
+    } else {
+        valuesInEquation = [equation];
+    }
+    
     if (valuesInEquation.length > 1) {
-        var valuesInEquation = equation.split(/[-+/×]/);
         // Convert the values and put them in an array
         for (var i=0; i<valuesInEquation.length; i++) {
             var currentChar = valuesInEquation[i];            
@@ -35,10 +39,11 @@ function convertInput (equation) {
         }
         convertedEq.push(symbolsInEquation);
         return convertedEq;
-
+        
     } else if (valuesInEquation.length === 1 || splitEquation.length === 1) {
-
+        
         if (!isNaN(equation)){ //convert digits to number
+            console.log("hi");
             convertedEq.push(Number(equation)); 
         } else { 
             equation = scientificButtonConversion(equation);
@@ -207,8 +212,8 @@ function displayAnswer(answer) {
 var equation;
 document.getElementById("equalSign").onclick = function () {
     var equation = document.getElementById("equation").value;
-    var bracketEquation = extractBrackets(equation);
-    var convertedBracketEquation = convertInput(bracketEquation);
+    // var bracketEquation = extractBrackets(equation);
+    var convertedBracketEquation = convertInput(equation);
     
     displayAnswer(convertedBracketEquation);
     console.log(convertedBracketEquation);
@@ -216,5 +221,4 @@ document.getElementById("equalSign").onclick = function () {
 
 // Clear the  calculator text box
 document.getElementById("allClear").onclick = function () {
-    document.getElementById("equation").value = "";    
-}
+    document.getElementById("equation").value = "";
