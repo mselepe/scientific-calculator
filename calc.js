@@ -55,7 +55,7 @@ function convertInput (equation) {
     }    
 }    
 
-// Extract the bracket equation from full equation
+// SOlve the equation in the brackets
 function solveBrackets(equation) {
     var valuesInBrackets = new Array();
 
