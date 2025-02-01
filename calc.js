@@ -56,11 +56,33 @@ function convertInput (equation) {
 }    
 
 // Extract the bracket equation from full equation
-function extractBrackets(equation) {
+function solveBrackets(equation) {
     var valuesInBrackets = new Array();
 
     if (equation.length > 0) {
+        if (equation.includes("(")) {
+            valuesInBrackets = extractBrackets(equation);
+            
+            var convertedBracketEquation = convertInput(valuesInBrackets);
+            var bracketSolution = solve(convertedBracketEquation);
+            var start = equation.indexOf("(");
+            var end = equation.indexOf(")")+1;
+            
+            var newEquation =  equation.substring(0, start) + bracketSolution + equation.substring((end));
+            return newEquation;            
 
+        } else {
+            return equation;
+        }
+    }
+}
+
+// Extract the bracket equation from full equation
+function extractBrackets(equation) {
+    var valuesInBrackets;
+
+    if (equation.length > 0) {
+        
         if (equation.includes("(")) {
             var bracketOpenIndex;
             var bracketCloseIndex;
@@ -68,19 +90,16 @@ function extractBrackets(equation) {
                 bracketOpenIndex = equation.indexOf("(")+1;
                 bracketCloseIndex = equation.indexOf(")")-1;
             }
-            valuesInBrackets = equation.slice(bracketOpenIndex, bracketCloseIndex+1);
-        }
-
-        var bracketEquation = extractBrackets(equation);
-        var convertedBracketEquation = convertInput(bracketEquation);
-        var BracketSolution = solve(convertedBracketEquation);
-
-        
-        // return valuesInBrackets;
+            valuesInBrackets = equation.slice(bracketOpenIndex, bracketCloseIndex+1);             
+        } 
+        // console.log("valuesInBrackets");
+        return valuesInBrackets;
     } else {
         return valuesInBrackets;
     }
+    // }
 }
+
 
 // Convert and implement the scientific buttons on the calculator
 function scientificButtonConversion(currentChar) {
@@ -99,7 +118,7 @@ function scientificButtonConversion(currentChar) {
         currentChar = Math.cbrt(base);
 
     } else if (currentChar.startsWith("√")) {
-        var base = checkBase(Number(currentChar.slice(2)));
+        var base = checkBase(Number(currentChar.slice(1)));
         currentChar = Math.sqrt(base);
 
     } else if (currentChar.startsWith("±")){
@@ -123,6 +142,8 @@ function scientificButtonConversion(currentChar) {
         var indexOfPowerSymbol = currentChar.indexOf("^");
         var base = checkBase(Number(currentChar.slice(0, indexOfPowerSymbol)));
         var power = checkBase(Number(currentChar.slice(indexOfPowerSymbol+1)));
+        
+        console.log(power);
         currentChar = Math.pow(base, power);
     
     } else if (currentChar.endsWith("!")) {
@@ -133,54 +154,52 @@ function scientificButtonConversion(currentChar) {
         var base = checkBase(Number(currentChar.slice(0, -1)));
         currentChar = base/100;
     
-    } else if (currentChar.startsWith("abs(")) {
-        var base = extractBrackets(currentChar);
+    } else if (currentChar.startsWith("abs")) {
+        var base = checkBase(Number(currentChar.slice(3)));
         base = Number(base);
         currentChar = Math.abs(base);
     
-    } else if (currentChar.startsWith("ln(")) {
-        var base = extractBrackets(currentChar);
+    } else if (currentChar.startsWith("ln")) {
+        var base = checkBase(Number(currentChar.slice(2)));
         base = Number(base);
-        console.log(base);
         currentChar = Math.log(base);
     
-    } else if (currentChar.startsWith("log10(")) {
-        var base = extractBrackets(currentChar);
+    } else if (currentChar.startsWith("log10")) {
+        var base = checkBase(Number(currentChar.slice(5)));
         base = Number(base);
         currentChar = Math.log10(base);
     
-    } else if (currentChar.startsWith("sinh(")) {
-        var base = extractBrackets(currentChar);
+    } else if (currentChar.startsWith("sinh")) {
+        var base = checkBase(Number(currentChar.slice(4)));
         base = Number(base);
         currentChar = Math.sinh(base);
     
-    } else if (currentChar.startsWith("cosh(")) {
-        var base = extractBrackets(currentChar);
+    } else if (currentChar.startsWith("cosh")) {
+        var base = checkBase(Number(currentChar.slice(4)));
         base = Number(base);
         currentChar = Math.cosh(base);
     
-    } else if ( currentChar.startsWith("tanh(")) {
-        var base = extractBrackets(currentChar);
+    } else if ( currentChar.startsWith("tanh")) {
+        var base = checkBase(Number(currentChar.slice(4)));
         base = Number(base);
         currentChar = Math.tanh(base);
-    
-    } else if (currentChar.startsWith("sin(")) {
-        var base = extractBrackets(currentChar);
+        
+    } else if (currentChar.startsWith("sin")) {
+        var base = checkBase(Number(currentChar.slice(3)));
         base = Number(base) * (Math.PI/180 );
         currentChar = Math.sin(base);
-    
-    } else if (currentChar.startsWith("cos(")) {
-        var base = extractBrackets(currentChar);
+        
+    } else if (currentChar.startsWith("cos")) {
+        var base = checkBase(Number(currentChar.slice(3)));
         base = Number(base) * (Math.PI / 180 );
         currentChar = Math.cos(base);
-    
-    } else if (currentChar.startsWith("tan(")) {
-        var base = extractBrackets(currentChar);
+        
+    } else if (currentChar.startsWith("tan")) {
+        var base = checkBase(Number(currentChar.slice(3)));
         base = Number(base) * (Math.PI / 180 );
         currentChar = Math.tan(base);
     }  
 
-        // console.log(typeof currentChar);
     return currentChar;        
 }    
 
@@ -198,7 +217,7 @@ function solve(equationArray) {
                 valuesArray.splice(i+1, 1);  
             }
         })
-    
+        
         symbolArray.forEach((stringSymbol, i)  => {
             if (stringSymbol === "×") {
                 answer = valuesArray[i] * valuesArray[i+1];
@@ -207,15 +226,18 @@ function solve(equationArray) {
                 valuesArray.splice(i+1, 1);  
             }
         })
+        
+        for (var i=0; i<symbolArray.length; i++) {
+            console.log(i);
+            var symbol = symbolArray[i];
     
-        symbolArray.forEach((stringSymbol, i)  => {
-            if (stringSymbol === "+") {
+            if (symbol === "+") {
                 answer = valuesArray[i] + valuesArray[i+1];
                 valuesArray[i] = answer;
                 symbolArray.splice(i, 1);  
-                valuesArray.splice(i+1, 1);  
+                valuesArray.splice(i+1, 1);
             }
-        })
+        }
     
         symbolArray.forEach((stringSymbol, i)  => {
             if (stringSymbol === "-") {
@@ -226,7 +248,7 @@ function solve(equationArray) {
             }
         })
 
-        return valuesArray;
+        return valuesArray[0];
     } else {
         return valuesArray;
     }
@@ -234,7 +256,7 @@ function solve(equationArray) {
 
 // Check whether the base is a number
 function checkBase(base) {
-    if (base && !(base in ["-", "+", "×", "/"])) {
+    if (base && !["-", "+", "×", "/"].includes(base)) {
         return base;
     } else {
         return "NaN"
@@ -265,14 +287,12 @@ function displayAnswer(answer) {
 var equation;
 document.getElementById("equalSign").onclick = function () {
     var equation = document.getElementById("equation").value;
-    var bracketEquation = extractBrackets(equation);
-    var convertedBracketEquation = convertInput(bracketEquation);
-    var BracketSolution = solve(convertedBracketEquation);
-
-
+    var convertedEquation = solveBrackets(equation);
+    var equationToSolve = convertInput(convertedEquation);
+    // console.log(convertedEquation);
+    var solution = solve(equationToSolve);
     
     displayAnswer(solution);
-    console.log(solution);
 }
 
 // Clear the  calculator text box
