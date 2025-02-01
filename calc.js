@@ -39,20 +39,18 @@ function convertInput (equation) {
         }
         convertedEq.push(symbolsInEquation);
         return convertedEq;
-        
+    
     } else if (valuesInEquation.length === 1 || splitEquation.length === 1) {
         
         if (!isNaN(equation)){ //convert digits to number
-            console.log("hi");
             convertedEq.push(Number(equation)); 
         } else { 
             equation = scientificButtonConversion(equation);
             convertedEq.push(equation); 
         }   
         return convertedEq;
-    }  
-
-    else {
+        
+    } else {
         return "";
     }    
 }    
@@ -140,44 +138,93 @@ function scientificButtonConversion(currentChar) {
         console.log(base);
         currentChar = Math.log(base);
     
-    } else if (currentChar.startsWith("log(")) {
-        var base = Number(currentChar.slice(0, -1));
-        currentChar = Math.abs(base);
+    } else if (currentChar.startsWith("log10(")) {
+        var base = extractBrackets(currentChar);
+        base = Number(base);
+        currentChar = Math.log10(base);
     
     } else if (currentChar.startsWith("sinh(")) {
-        var base = Number(currentChar.slice(0, -1));
-        currentChar = Math.abs(base);
+        var base = extractBrackets(currentChar);
+        base = Number(base);
+        currentChar = Math.sinh(base);
     
     } else if (currentChar.startsWith("cosh(")) {
-        var param = currentChar.slice(2);
-        currentChar = Math.pow(10, param);
+        var base = extractBrackets(currentChar);
+        base = Number(base);
+        currentChar = Math.cosh(base);
     
-        equationArray.splice(param, 1);
     } else if ( currentChar.startsWith("tanh(")) {
-        var param = currentChar.slice(2);
-        currentChar = Math.pow(10, param);
+        var base = extractBrackets(currentChar);
+        base = Number(base);
+        currentChar = Math.tanh(base);
     
-        equationArray.splice(param, 1);
     } else if (currentChar.startsWith("sin(")) {
-        var param = currentChar.slice(2);
-        currentChar = Math.pow(10, param);
+        var base = extractBrackets(currentChar);
+        base = Number(base) * (Math.PI/180 );
+        currentChar = Math.sin(base);
     
-        equationArray.splice(param, 1);
     } else if (currentChar.startsWith("cos(")) {
-        var param = currentChar.slice(2);
-        currentChar = Math.pow(10, param);
+        var base = extractBrackets(currentChar);
+        base = Number(base) * (Math.PI / 180 );
+        currentChar = Math.cos(base);
     
-        equationArray.splice(param, 1);
     } else if (currentChar.startsWith("tan(")) {
-        var param = currentChar.slice(2);
-        currentChar = Math.pow(10, param);
-        equationArray.splice(param, 1);
+        var base = extractBrackets(currentChar);
+        base = Number(base) * (Math.PI / 180 );
+        currentChar = Math.tan(base);
     }  
 
         // console.log(typeof currentChar);
-    return currentChar;    
-    
+    return currentChar;        
 }    
+
+function solve(equationArray) {
+    var valuesArray = equationArray[0];
+    var symbolArray = equationArray[1];
+    var answer;
+
+    for (var i=0; i<symbolArray.length; i++) {
+        var symbol = symbolArray[i];
+
+        if (symbol === "/") {
+            answer = valuesArray[i] / valuesArray[i+1];
+            valuesArray[i] = answer;
+            valuesArray.splice(i+1, 1);
+        }
+    }
+
+    for (var i=0; i<symbolArray.length; i++) {
+        var symbol = symbolArray[i];
+
+        if (symbol === "×") {
+            answer = valuesArray[i] * valuesArray[i+1];
+            valuesArray[i] = answer;
+            valuesArray.splice(i+1, 1);
+        }
+    }
+
+    for (var i=0; i<symbolArray.length; i++) {
+        var symbol = symbolArray[i];
+
+        if (symbol === "+") {
+            answer = valuesArray[i] + valuesArray[i+1];
+            valuesArray[i] = answer;
+            valuesArray.splice(i+1, 1);
+        }
+    }
+
+    for (var i=0; i<symbolArray.length; i++) {
+        var symbol = symbolArray[i];
+
+        if (symbol === "-") {
+            answer = valuesArray[i] - valuesArray[i+1];
+            valuesArray[i] = answer;
+            valuesArray.splice(i+1, 1);
+        }
+    }
+
+    return 
+}
 
 // Check whether the base is a number
 function checkBase(base) {
@@ -221,4 +268,5 @@ document.getElementById("equalSign").onclick = function () {
 
 // Clear the  calculator text box
 document.getElementById("allClear").onclick = function () {
-    document.getElementById("equation").value = "";
+    document.getElementById("equation").value = "";    
+}
