@@ -227,45 +227,43 @@ function solve(equationArray) {
     
     if (equationArray[1]) {
         var symbolArray = equationArray[1];
-        symbolArray.forEach((stringSymbol, i)  => {
-            if (stringSymbol === "/") {
-                answer = valuesArray[i] / valuesArray[i+1];
-                valuesArray[i] = answer;
-                symbolArray.splice(i, 1);  
-                valuesArray.splice(i+1, 1);  
-            }
+        while (symbolArray.length > 0) {
+            symbolArray.forEach((stringSymbol, i)  => {
+                if (stringSymbol === "/") {
+                    answer = valuesArray[i] / valuesArray[i+1];
+                    valuesArray[i] = answer;
+                    symbolArray.splice(i, 1);  
+                    valuesArray.splice(i+1, 1);  
+                }
+            })
+            
+            symbolArray.forEach((stringSymbol, i)  => {
+                if (stringSymbol === "×") {
+                    answer = valuesArray[i] * valuesArray[i+1];
+                    valuesArray[i] = answer;
+                    symbolArray.splice(i, 1);  
+                    valuesArray.splice(i+1, 1);  
+                }
+            })
+            
+            symbolArray.forEach((stringSymbol, i)  => {
+                if (stringSymbol === "+") {
+                    answer = valuesArray[i] + valuesArray[i+1];
+                    valuesArray[i] = answer;
+                    symbolArray.splice(i, 1);  
+                    valuesArray.splice(i+1, 1);  
+                }
+            })
+            
+            symbolArray.forEach((stringSymbol, i)  => {
+                if (stringSymbol === "-") {
+                    answer = valuesArray[i] - valuesArray[i+1];
+                    valuesArray[i] = answer;
+                    symbolArray.splice(i, 1);  
+                    valuesArray.splice(i+1, 1);  
+                }
         })
-        
-        symbolArray.forEach((stringSymbol, i)  => {
-            if (stringSymbol === "×") {
-                answer = valuesArray[i] * valuesArray[i+1];
-                valuesArray[i] = answer;
-                symbolArray.splice(i, 1);  
-                valuesArray.splice(i+1, 1);  
-            }
-        })
-        
-        for (var i=0; i<symbolArray.length; i++) {
-            console.log(i);
-            var symbol = symbolArray[i];
-    
-            if (symbol === "+") {
-                answer = valuesArray[i] + valuesArray[i+1];
-                valuesArray[i] = answer;
-                symbolArray.splice(i, 1);  
-                valuesArray.splice(i+1, 1);
-            }
-        }
-    
-        symbolArray.forEach((stringSymbol, i)  => {
-            if (stringSymbol === "-") {
-                answer = valuesArray[i] - valuesArray[i+1];
-                valuesArray[i] = answer;
-                symbolArray.splice(i, 1);  
-                valuesArray.splice(i+1, 1);  
-            }
-        })
-
+    }
         return valuesArray[0];
     } else {
         return valuesArray;
