@@ -1,0 +1,50 @@
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CreateEvent]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[CreateEvent]
+GO
+
+CREATE PROCEDURE [dbo].[CreateEvent]
+(
+	@eventName VARCHAR(255),
+	@eventDescription VARCHAR(255),
+	@eventImageBlobName VARCHAR(255),
+	@eventType VARCHAR(255),
+	@startDate DATETIME,
+	@endDate DATETIME,
+	@userId VARCHAR(255)
+)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	DECLARE @eventTypeId INT, @eventStatusId INT, @eventId INT;
+BEGIN TRY
+BEGIN TRANSACTION;
+		SET @eventTypeId = (SELECT eventTypeId FROM eventTypes WHERE eventTypeName = @eventType);
+		SET @eventStatusId = (SELECT eventStatusId FROM eventStatuses WHERE eventStatus = 'Upcoming');
+
+
+INSERT INTO events (eventName, eventDescription, eventImageBlobName, eventTypeId)
+VALUES (@eventName, @eventDescription, @eventImageBlobName, @eventTypeId);
+
+SET @eventId = SCOPE_IDENTITY();
+
+INSERT INTO eventsStatusHistory (eventId, eventStatusId, userId)
+VALUES (@eventId, @eventStatusId, @userId);
+
+INSERT INTO eventsStartDateHistory (eventId, startDate, userId)
+VALUES (@eventId, @startDate, @userId);
+
+INSERT INTO eventsEndDateHistory (eventId, endDate, userId)
+VALUES (@eventId, @endDate, @userId);
+
+SELECT @eventId AS eventId;
+
+COMMIT TRANSACTION;
+
+END TRY
+BEGIN CATCH
+IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+
+        THROW;
+END CATCH;
+END;

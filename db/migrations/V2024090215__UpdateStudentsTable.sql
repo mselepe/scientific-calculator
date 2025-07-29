@@ -1,0 +1,10 @@
+IF NOT EXISTS (
+    SELECT * 
+    FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_NAME = 'students' 
+    AND COLUMN_NAME = 'complexFlat'
+)
+BEGIN
+    ALTER TABLE students
+    ADD complexFlat VARCHAR(176) NOT NULL DEFAULT 'N/A'
+END

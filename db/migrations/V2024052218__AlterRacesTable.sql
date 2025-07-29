@@ -1,0 +1,8 @@
+IF EXISTS (
+    SELECT 1 
+    FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_NAME = 'races'
+)
+BEGIN
+DELETE FROM races WHERE races.race='Asian';
+END;

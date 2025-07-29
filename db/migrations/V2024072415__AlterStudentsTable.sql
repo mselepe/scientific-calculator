@@ -1,0 +1,10 @@
+ IF NOT EXISTS (
+    SELECT * 
+    FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_NAME = 'students' 
+    AND COLUMN_NAME = 'dateOfBirth'
+)
+BEGIN
+ALTER TABLE students
+ADD dateOfBirth VARCHAR(10)
+END
