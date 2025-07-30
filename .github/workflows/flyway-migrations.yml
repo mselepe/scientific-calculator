@@ -14,23 +14,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Start SQL Server in Docker
-        run: |
-          docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=J38jGUCo5j$jlCAQgcf50" \
-            -p 1433:1433 --name sql-test -d mcr.microsoft.com/mssql/server:2019-latest
-          echo "Waiting for SQL Server to start..."
-          sleep 20
-
-      - name: Run Flyway Migration (Test)
-        run: |
-            docker run --rm \
-            --volume ${{ github.workspace }}/db/migrations:/flyway/sql:ro \
-            redgate/flyway \
-            -url="jdbc:sqlserver://localhost:1433;databaseName=QABacpac" \
-            -user=maselo2 \
-            -password=J38jGUCo5j$jlCAQgcf50 \
-            migrate
-
       - name: Zip migration scripts
         run: zip db-migrations.zip db/migrations/ -r
 
