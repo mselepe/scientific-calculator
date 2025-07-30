@@ -1,4 +1,4 @@
-name: Test Flyway Migration Locally
+name: Test Local Migration
 
 on:
   push:
