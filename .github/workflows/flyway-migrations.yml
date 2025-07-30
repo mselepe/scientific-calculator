@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Zip migration scripts
-        run: zip db-migrations.zip db/migrations/ -r
+        run: zip .db/db-migrations.zip db/migrations/ -r
 
       - name: Upload DB artifact
         uses: actions/upload-artifact@v4
