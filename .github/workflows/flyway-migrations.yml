@@ -26,7 +26,7 @@ jobs:
             docker run --rm \
             --volume ${{ github.workspace }}/db/migrations:/flyway/sql:ro \
             redgate/flyway \
-            -url="jdbc:sqlserver://localhost:1433;databaseName=theQA" \
+            -url="jdbc:sqlserver://localhost:1433;databaseName=QABacpac" \
             -user=maselo2 \
             -password=J38jGUCo5j$jlCAQgcf50 \
             migrate
