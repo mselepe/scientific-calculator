@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - db/migrations/**
 
 jobs:
   test-flyway:
@@ -25,13 +23,13 @@ jobs:
 
       - name: Run Flyway Migration (Test)
         run: |
-          docker run --rm \
+            docker run --rm \
             --volume ${{ github.workspace }}/db/migrations:/flyway/sql:ro \
             redgate/flyway \
             -url="jdbc:sqlserver://localhost:1433;databaseName=theQA" \
             -user=maselo2 \
             -password=J38jGUCo5j$jlCAQgcf50 \
-            baselineOnMigrate=true
+            -baselineOnMigrate=true
             migrate
 
       - name: Zip migration scripts
