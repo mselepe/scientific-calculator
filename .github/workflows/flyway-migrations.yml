@@ -14,11 +14,29 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Zip migration scripts
-        run: zip -r db-migrations.zip db/migrations/
+      - name: Start SQL Server in Docker
+        run: |
+          docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=J38jGUCo5j$jlCAQgcf50" \
+            -p 1433:1433 --name sql-test -d mcr.microsoft.com/mssql/server:2019-latest
+          echo "Waiting for SQL Server to start..."
+          sleep 20
 
-      - name: Upload Flyway artifact
+      - name: Run Flyway Migration (Test)
+        run: |
+            docker run --rm \
+            --volume ${{ github.workspace }}/db/migrations:/flyway/sql:ro \
+            redgate/flyway \
+            -url="jdbc:sqlserver://localhost:1433;databaseName=theQA" \
+            -user=maselo2 \
+            -password=J38jGUCo5j$jlCAQgcf50 \
+            migrate
+
+      - name: Zip migration scripts
+        run: zip db-migrations.zip db/migrations/ -r
+
+      - name: Upload DB artifact
         uses: actions/upload-artifact@v4
         with:
-          name: flyway-migrations
-          path: db-migrations.zip
+          name: artifact-DB
+          path: .db/db-migrations.zip
+          if-no-files-found: error
