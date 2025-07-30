@@ -33,3 +33,12 @@ jobs:
             -password=J38jGUCo5j$jlCAQgcf50 \
             baselineOnMigrate=true
             migrate
+
+      - name: Zip migration scripts
+        run: zip -r db-migrations.zip db/migrations/
+
+      - name: Upload Flyway artifact
+        uses: actions/upload-artifact@v4
+        with:
+        name: flyway-migrations
+        path: db-migrations.zip
