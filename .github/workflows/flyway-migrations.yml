@@ -38,5 +38,5 @@ jobs:
       - name: Upload Flyway artifact
         uses: actions/upload-artifact@v4
         with:
-        name: flyway-migrations
-        path: db-migrations.zip
+          name: flyway-migrations
+          path: db-migrations.zip
